@@ -2,6 +2,8 @@ const express = require("express");
 
 const routes = require("./routes");
 
+require("./database/index");
+
 class App {
   constructor() {
     this.server = express();
