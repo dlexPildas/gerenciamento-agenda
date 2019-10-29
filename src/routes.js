@@ -10,6 +10,8 @@ const ScheduleController = require("./app/controllers/ScheduleController");
 
 const EventController = require("./app/controllers/EventController");
 
+const UserEventController = require("./app/controllers/UserEventController");
+
 const routes = new Router();
 
 /**
@@ -31,5 +33,10 @@ routes.post("/schedule", authorization, ScheduleController.store);
  * event's routes
  */
 routes.post("/event", authorization, EventController.store);
+
+/**
+ * EventUser's routes
+ */
+routes.post("/userToEvent", authorization, UserEventController.store);
 
 module.exports = routes;

@@ -5,8 +5,9 @@ const databaseConfig = require("../config/database");
 const User = require("../app/models/User");
 const Schedule = require("../app/models/Schedule");
 const Event = require("../app/models/Event");
+const UserEvent = require("../app/models/UserEvent");
 
-const models = [User, Schedule, Event];
+const models = [User, Schedule, Event, UserEvent];
 
 class Database {
   constructor() {
