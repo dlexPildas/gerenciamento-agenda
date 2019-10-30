@@ -1,19 +1,39 @@
-const UserEvent = require("../models/UserEvent");
+const Yup = require("yup");
+
 const User = require("../models/User");
 const Event = require("../models/Event");
 
-class UserEventController {
+class EventUserController {
   async store(req, res) {
+    /**
+     * Data's validations
+     */
+    const schema = Yup.object().shape({
+      event_id: Yup.number().required(),
+      user_id: Yup.number().required()
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(401).json({ error: "Validation fails" });
+    }
+
     const { user_id, event_id } = req.body;
 
     /**
-     * check if the user logged is owner of the event
+     * check if the event exist and if user logged is owner of the event
      */
     const eventExist = await Event.findOne({
-      where: { id: event_id, owner: req.userId }
+      where: { id: event_id }
     });
+
     if (!eventExist) {
       return res.status(401).json({ error: "Event does not found" });
+    }
+
+    if (eventExist.owner !== req.userId) {
+      return res.status(401).json({
+        error: "You don't have permission to add users to this event"
+      });
     }
 
     /**
@@ -27,30 +47,15 @@ class UserEventController {
      * check if the user that will be add to event exist
      */
     const userExist = await User.findByPk(user_id);
+
     if (!userExist) {
       return res.status(401).json({ error: "User does not found" });
     }
 
-    /**
-     * check if the user already was add to event
-     */
-    const userEventExist = await UserEvent.findOne({
-      where: { id: 1 }
-    });
-    if (!userEventExist) {
-      return res.status(401).json({ error: "User already was add to event" });
-    }
+    await userExist.addEvents(eventExist);
 
-    /**
-     * Add the user to event
-     */
-    // const userEvent = await UserEvent.create({
-    //   user_id: user_id,
-    //   event_id: event_id
-    // });
-
-    return res.json({ a: userExist.id, b: eventExist.id });
+    return res.json(userExist);
   }
 }
 
-module.exports = new UserEventController();
+module.exports = new EventUserController();

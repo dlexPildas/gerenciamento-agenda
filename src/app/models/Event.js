@@ -12,14 +12,20 @@ class Event extends Model {
         category: Sequelize.STRING
       },
       {
-        sequelize
+        sequelize,
+        tableName: "events"
       }
     );
     return this;
   }
 
   static associate(models) {
-    this.belongsTo(models.User, { foreignKey: "owner" });
+    this.belongsTo(models.User, { foreignKey: "owner", as: "user_owner" });
+    this.belongsToMany(models.User, {
+      foreignKey: "event_id",
+      as: "users",
+      through: "event_users"
+    });
   }
 }
 

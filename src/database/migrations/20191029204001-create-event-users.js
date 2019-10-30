@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("usersevents", {
+    return queryInterface.createTable("event_users", {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -13,18 +13,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: "users", key: "id" },
         onUpdate: "CASCADE",
-        onDelete: "SET NULL",
+        onDelete: "CASCADE",
         allowNull: false
       },
       event_id: {
         type: Sequelize.INTEGER,
         references: { model: "events", key: "id" },
         onUpdate: "CASCADE",
-        onDelete: "SET NULL",
+        onDelete: "CASCADE",
         allowNull: false
-      },
-      canceled_at: {
-        type: Sequelize.BOOLEAN
       },
       created_at: {
         type: Sequelize.DATE,
@@ -38,6 +35,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable("usersevents");
+    return queryInterface.dropTable("event_users");
   }
 };

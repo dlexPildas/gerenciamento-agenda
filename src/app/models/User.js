@@ -14,7 +14,8 @@ class User extends Model {
         password_hash: Sequelize.STRING
       },
       {
-        sequelize
+        sequelize,
+        tableName: "users"
       }
     );
 
@@ -25,6 +26,14 @@ class User extends Model {
     });
 
     return this;
+  }
+
+  static associate(models) {
+    this.belongsToMany(models.Event, {
+      foreignKey: "user_id",
+      as: "events",
+      through: "event_users"
+    });
   }
 
   checkPassword(password) {
