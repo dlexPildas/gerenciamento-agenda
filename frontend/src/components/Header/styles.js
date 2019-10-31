@@ -22,6 +22,10 @@ export const Container = styled.div`
       &:hover {
         border-bottom-color: #2e74b9;
       }
+
+      @media (max-width: 900px) {
+        font-size: 58%;
+      }
     }
   }
 

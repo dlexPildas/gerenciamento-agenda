@@ -20,21 +20,23 @@ class SessionController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: "Validation fails" });
+      return res.json({ error: "Validation fails" });
     }
 
     const { email, password } = req.body;
+
+    console.log(email, password);
 
     const userExist = await User.findOne({
       where: { email }
     });
 
     if (!userExist) {
-      return res.status(401).json({ error: "User not found!" });
+      return res.json({ error: "User not found!" });
     }
 
     if (!(await userExist.checkPassword(password))) {
-      return res.status(401).json({ error: "Password does not valid" });
+      return res.json({ error: "Password does not valid" });
     }
 
     const { id, name } = userExist;

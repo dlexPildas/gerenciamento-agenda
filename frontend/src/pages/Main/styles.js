@@ -1,6 +1,16 @@
 import styled from "styled-components";
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+`;
+export const ContainerEvents = styled.div`
+  width: 100%;
+`;
 
 export const Info = styled.div`
   display: flex;
@@ -39,4 +49,9 @@ export const Subscribed = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+export const ContainerForm = styled.div`
+  width: 100%;
+  margin: 40px 50px;
 `;

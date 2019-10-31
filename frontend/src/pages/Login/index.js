@@ -1,18 +1,100 @@
 import React, { Component } from "react";
 
-import { Container, LoginComponent, Logo, Input, ButtonLogin } from "./styles";
+import api from "../../services/api";
+
+import {
+  Container,
+  LoginComponent,
+  Logo,
+  Error,
+  Input,
+  ButtonLogin
+} from "./styles";
 
 import logo from "../../assets/logo.png";
 
 export default class Login extends Component {
+  state = {
+    email: "",
+    password: "",
+    errorEmail: false,
+    errorPassword: false,
+    messageEmail: "",
+    messagePassword: ""
+  };
+
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+    console.log(this.state.password);
+  };
+
+  handleSubmit = async () => {
+    const { email, password } = this.state;
+
+    if (email === "") {
+      this.setState({ errorEmail: true, messageEmail: "informe um email" });
+      return;
+    }
+
+    this.setState({ errorEmail: false, messageEmail: "" });
+
+    if (password === "") {
+      this.setState({
+        errorPassword: true,
+        messagePassword: "informe uma senha"
+      });
+      return;
+    }
+
+    this.setState({ errorPassword: false, messagePassword: "" });
+
+    const response = await api.post("/session", {
+      email,
+      password
+    });
+
+    if (response.data.error) {
+      return alert(response.data.error);
+    }
+
+    console.log(response.data);
+
+    this.props.history.push("/main");
+  };
+
   render() {
+    const {
+      email,
+      password,
+      errorEmail,
+      errorPassword,
+      messageEmail,
+      messagePassword
+    } = this.state;
+
     return (
       <Container>
         <LoginComponent>
           <Logo src={logo} alt="logo" />
-          <Input type="text" placeholder="email" />
-          <Input type="password" placeholder="senha" />
-          <ButtonLogin>Entrar</ButtonLogin>
+          {errorEmail && <Error>{messageEmail}</Error>}
+
+          <Input
+            type="text"
+            value={email}
+            name="email"
+            placeholder="email"
+            onChange={this.handleChange}
+          />
+          {errorPassword && <Error>{messagePassword}</Error>}
+
+          <Input
+            type="password"
+            value={password}
+            name="password"
+            placeholder="senha"
+            onChange={this.handleChange}
+          />
+          <ButtonLogin onClick={this.handleSubmit}>Entrar</ButtonLogin>
         </LoginComponent>
       </Container>
     );

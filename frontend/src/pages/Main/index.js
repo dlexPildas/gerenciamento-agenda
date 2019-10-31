@@ -6,9 +6,16 @@ import api from "../../services/api";
 
 import Header from "../../components/Header";
 
-import { Container, Info, ListEvent, Subscribed } from "./styles";
+import {
+  Container,
+  ContainerEvents,
+  Info,
+  ListEvent,
+  ContainerForm
+} from "./styles";
 
-import ContainerEvents from "../../components/ContainerEvents";
+import Events from "../../components/ContainerEvents";
+import FormEvent from "../../components/FormEvents";
 
 export default class Main extends Component {
   state = {
@@ -23,8 +30,6 @@ export default class Main extends Component {
       }
     });
 
-    console.log(response.data);
-
     this.setState({
       events: response.data.events
     });
@@ -38,39 +43,44 @@ export default class Main extends Component {
         <Header />
         <Container>
           <ContainerEvents>
-            <Info>
-              <FaRegCalendarAlt />
-              <h5>Eventos em andamento</h5>
-            </Info>
+            <Events>
+              <Info>
+                <FaRegCalendarAlt />
+                <h5>Eventos em andamento</h5>
+              </Info>
 
-            <ListEvent>
-              {events.length > 0 &&
-                events.map(event => (
-                  <li key={event.id}>
-                    <strong>{event.name}</strong>
-                    <span>{event.date_event}</span>
-                    <span>{event.place}</span>
-                  </li>
-                ))}
-            </ListEvent>
-          </ContainerEvents>
+              <ListEvent>
+                {events.length > 0 &&
+                  events.map(event => (
+                    <li key={event.id}>
+                      <strong>{event.name}</strong>
+                      <span>{event.date_event}</span>
+                      <span>{event.place}</span>
+                    </li>
+                  ))}
+              </ListEvent>
+            </Events>
 
-          <ContainerEvents>
-            <Info>
-              <FaRegCalendarAlt />
-              <h5>Próximos eventos</h5>
-            </Info>
-            <ListEvent>
-              {events.length > 0 &&
-                events.map(event => (
-                  <li key={event.id}>
-                    <strong>{event.name}</strong>
-                    <span>{event.date_event}</span>
-                    <span>{event.place}</span>
-                  </li>
-                ))}
-            </ListEvent>
+            <Events>
+              <Info>
+                <FaRegCalendarAlt />
+                <h5>Próximos eventos</h5>
+              </Info>
+              <ListEvent>
+                {events.length > 0 &&
+                  events.map(event => (
+                    <li key={event.id}>
+                      <strong>{event.name}</strong>
+                      <span>{event.date_event}</span>
+                      <span>{event.place}</span>
+                    </li>
+                  ))}
+              </ListEvent>
+            </Events>
           </ContainerEvents>
+          <ContainerForm>
+            <FormEvent />
+          </ContainerForm>
         </Container>
       </>
     );

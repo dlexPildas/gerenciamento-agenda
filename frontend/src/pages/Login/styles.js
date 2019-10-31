@@ -22,6 +22,15 @@ export const Logo = styled.img`
   margin-bottom: 20px;
 `;
 
+export const Error = styled.span`
+  width: 100%;
+  text-align: start;
+  color: red;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 11px;
+`;
+
 export const Input = styled.input`
   width: 100%;
   margin-bottom: 15px;
