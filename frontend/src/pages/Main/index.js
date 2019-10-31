@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
 import api from "../../services/api";
+import { getToken } from "../../services/auth";
 
 import Header from "../../components/Header";
 
@@ -23,12 +24,7 @@ export default class Main extends Component {
   };
 
   async componentDidMount() {
-    const response = await api.get("/event", {
-      headers: {
-        authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTcyNDY4ODk3LCJleHAiOjE1NzMwNzM2OTd9.aA1p4A8u2F-LEpDZf_iV8tzJfopFVvEHyDGGsVlbGaI"
-      }
-    });
+    const response = await api.get("/event");
 
     this.setState({
       events: response.data.events

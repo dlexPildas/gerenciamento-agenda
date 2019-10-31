@@ -29,6 +29,11 @@ export const Container = styled.div`
     }
   }
 
+  button {
+    background: transparent;
+    border: 0;
+  }
+
   svg {
     cursor: pointer;
     &:hover {
