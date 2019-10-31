@@ -29,7 +29,7 @@ class EventController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: "Validation fails" });
+      return res.json({ error: "Validation fails" });
     }
 
     const userExist = await User.findByPk(req.userId);
@@ -37,7 +37,7 @@ class EventController {
     const { name, description, date_event, place, category } = req.body;
 
     if (!userExist) {
-      return res.status(401).json({ error: "User does not exist" });
+      return res.json({ error: "User does not exist" });
     }
 
     /**
@@ -45,7 +45,7 @@ class EventController {
      */
     const dateStart = startOfDay(parseISO(date_event));
     if (isBefore(dateStart, new Date())) {
-      return res.status(401).json({ error: "Date is past" });
+      return res.json({ error: "Date is past" });
     }
 
     /**
@@ -87,7 +87,7 @@ class EventController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: "Validation fails" });
+      return res.json({ error: "Validation fails" });
     }
 
     const { event_id } = req.body;
@@ -95,7 +95,7 @@ class EventController {
     const event = await Event.findByPk(event_id);
 
     if (!event) {
-      return res.status(401).json({ error: "Event does not found" });
+      return res.json({ error: "Event does not found" });
     }
 
     if (event.owner !== req.userId) {
@@ -118,7 +118,7 @@ class EventController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: "Validation fails" });
+      return res.json({ error: "Validation fails" });
     }
 
     const user = await User.findByPk(req.userId);
@@ -128,7 +128,7 @@ class EventController {
     const event = await Event.findByPk(event_id);
 
     if (!event) {
-      return res.status(401).json({ error: "Event does not found" });
+      return res.json({ error: "Event does not found" });
     }
 
     if (event.owner !== req.userId) {
