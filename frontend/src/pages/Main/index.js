@@ -83,7 +83,7 @@ export default class Main extends Component {
 
     return (
       <>
-        <Header />
+        <Header page={1} />
         <Container>
           <ContainerEvents>
             <Events>

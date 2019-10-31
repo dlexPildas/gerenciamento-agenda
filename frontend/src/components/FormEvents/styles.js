@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  margin-left: 100px;
   display: flex;
   flex-direction: column;
   @media (max-width: 900px) {
