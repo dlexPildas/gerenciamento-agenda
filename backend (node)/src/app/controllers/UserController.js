@@ -11,6 +11,7 @@ class UserController {
      * Find all users and your events
      */
     const users = await User.findAll({
+      where: { id: { [Op.ne]: req.userId } },
       include: {
         association: "events"
       }

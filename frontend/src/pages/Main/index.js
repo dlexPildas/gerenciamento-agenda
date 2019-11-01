@@ -2,7 +2,12 @@ import React, { Component } from "react";
 
 import { startOfDay, parseISO, format, isAfter, isEqual } from "date-fns";
 
-import { FaRegCalendarAlt, FaUserPlus } from "react-icons/fa";
+import {
+  FaRegCalendarAlt,
+  FaUserPlus,
+  FaTimesCircle,
+  FaEdit
+} from "react-icons/fa";
 
 import api from "../../services/api";
 
@@ -13,11 +18,13 @@ import {
   ContainerEvents,
   Info,
   ListEvent,
-  ContainerForm
+  ContainerForm,
+  Action
 } from "./styles";
 
 import Events from "../../components/ContainerEvents";
 import FormEvent from "../../components/FormEvents";
+import UpdateEvents from "../UpdateEvents";
 
 export default class Main extends Component {
   state = {
@@ -26,17 +33,17 @@ export default class Main extends Component {
     description: "",
     date_event: Date(),
     place: "",
-    category: ""
+    category: "",
+    updateEvents: false
   };
 
   async componentDidMount() {
     await this.loadEvents();
-
-    console.log(
-      format(parseISO(this.state.events[0].date_event), "MM/dd/yyyy")
-    );
   }
 
+  /**
+   * function to load all events this users of database
+   */
   loadEvents = async () => {
     const response = await api.get("/event");
 
@@ -56,6 +63,35 @@ export default class Main extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  handleChangeUpdateEvent = () => {
+    const { updateEvents } = this.state;
+
+    updateEvents
+      ? this.setState({ updateEvents: false })
+      : this.setState({ updateEvents: true });
+
+    return console.log(updateEvents);
+  };
+  /**
+   * function to delete a event
+   */
+  handleDeleteEvent = async event_id => {
+    const response = await api.delete("/event", {
+      headers: {
+        event_id: event_id
+      }
+    });
+
+    if (response.data.error) {
+      return alert(response.data.error);
+    }
+
+    return alert("Evento deletado com sucesso!"), this.loadEvents();
+  };
+
+  /**
+   * function to create a event
+   */
   handleSubmit = async () => {
     const { name, description, date_event, place, category } = this.state;
 
@@ -93,7 +129,6 @@ export default class Main extends Component {
       this.loadEvents();
     } catch (err) {
       alert("Erro ao criar o evento! Contate o suporte.");
-      console.log(err);
     }
   };
 
@@ -110,81 +145,105 @@ export default class Main extends Component {
     return (
       <>
         <Header page={1} />
+        {console.log(this.state.updateEvents)}
+        {!this.state.updateEvents ? (
+          <Container>
+            <ContainerEvents>
+              <Events>
+                <Info>
+                  <FaRegCalendarAlt />
+                  <h5>Eventos em andamento</h5>
+                </Info>
 
-        <Container>
-          <ContainerEvents>
-            <Events>
-              <Info>
-                <FaRegCalendarAlt />
-                <h5>Eventos em andamento</h5>
-              </Info>
+                <ListEvent>
+                  {events.length > 0 &&
+                    events.map(
+                      event =>
+                        isEqual(
+                          parseISO(event.date_event),
+                          startOfDay(new Date())
+                        ) && (
+                          <li key={event.id}>
+                            <strong>{event.name}</strong>
+                            <span>{`${format(
+                              parseISO(event.date_event),
+                              "dd/MM/yyyy"
+                            )}`}</span>
+                            <span>{event.place}</span>
 
-              <ListEvent>
-                {events.length > 0 &&
-                  events.map(
-                    event =>
-                      isEqual(
-                        parseISO(event.date_event),
-                        startOfDay(new Date())
-                      ) && (
-                        <li key={event.id}>
-                          <strong>{event.name}</strong>
-                          <span>{`${format(
-                            parseISO(event.date_event),
-                            "dd/MM/yyyy"
-                          )}`}</span>
-                          <span>{event.place}</span>
+                            {event.user_owner && (
+                              <Action>
+                                <FaUserPlus
+                                  onClick={() => alert()}
+                                  title="Adicionar um novo participante"
+                                />
+                              </Action>
+                            )}
+                          </li>
+                        )
+                    )}
+                </ListEvent>
+              </Events>
 
-                          {event.user_owner && (
-                            <FaUserPlus
-                              onClick={() => alert()}
-                              title="Adicionar um novo participante"
-                            />
-                          )}
-                        </li>
-                      )
-                  )}
-              </ListEvent>
-            </Events>
-
-            <Events>
-              <Info>
-                <FaRegCalendarAlt />
-                <h5>Próximos eventos</h5>
-              </Info>
-              <ListEvent>
-                {events.length > 0 &&
-                  events.map(
-                    event =>
-                      isAfter(
-                        parseISO(event.date_event),
-                        startOfDay(new Date())
-                      ) && (
-                        <li key={event.id}>
-                          <strong>{event.name}</strong>
-                          <span>{`${format(
-                            parseISO(event.date_event),
-                            "dd/MM/yyyy"
-                          )}`}</span>
-                          <span>{event.place}</span>
-                        </li>
-                      )
-                  )}
-              </ListEvent>
-            </Events>
-          </ContainerEvents>
-          <ContainerForm>
-            <FormEvent
-              name={name}
-              description={description}
-              date_event={date_event}
-              category={category}
-              place={place}
-              change={this.handleChange}
-              handleSubmit={this.handleSubmit}
-            />
-          </ContainerForm>
-        </Container>
+              <Events>
+                <Info>
+                  <FaRegCalendarAlt />
+                  <h5>Próximos eventos</h5>
+                </Info>
+                <ListEvent>
+                  {events.length > 0 &&
+                    events.map(
+                      event =>
+                        isAfter(
+                          parseISO(event.date_event),
+                          startOfDay(new Date())
+                        ) && (
+                          <li key={event.id}>
+                            <strong>{event.name}</strong>
+                            <span>{`${format(
+                              parseISO(event.date_event),
+                              "dd/MM/yyyy"
+                            )}`}</span>
+                            <span>{event.place}</span>
+                            {event.user_owner && (
+                              <Action>
+                                <FaUserPlus
+                                  onClick={() => alert()}
+                                  title="Adicionar um novo participante"
+                                />
+                                <FaTimesCircle
+                                  onClick={() =>
+                                    this.handleDeleteEvent(event.id)
+                                  }
+                                  title="Excluir o evento"
+                                />
+                                <FaEdit
+                                  onClick={() => this.handleChangeUpdateEvent()}
+                                  title="Editar um evento"
+                                />
+                              </Action>
+                            )}
+                          </li>
+                        )
+                    )}
+                </ListEvent>
+              </Events>
+            </ContainerEvents>
+            <ContainerForm>
+              <FormEvent
+                name={name}
+                description={description}
+                date_event={date_event}
+                category={category}
+                place={place}
+                change={this.handleChange}
+                handleSubmit={this.handleSubmit}
+              />
+            </ContainerForm>
+          </Container>
+        ) : (
+          <UpdateEvents change={this.handleChangeUpdateEvent} />
+        )}
       </>
     );
   }

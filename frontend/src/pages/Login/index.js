@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import api from "../../services/api";
 
-import { login } from "../../services/auth";
+import { login, saveId } from "../../services/auth";
 
 import {
   Container,
@@ -60,6 +60,7 @@ export default class Login extends Component {
     }
 
     login(response.data.token);
+    saveId(response.data.id);
 
     this.props.history.push("/main");
   };

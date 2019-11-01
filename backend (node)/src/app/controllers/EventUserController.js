@@ -14,7 +14,7 @@ class EventUserController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: "Validation fails" });
+      return res.json({ error: "Validation fails" });
     }
 
     const { user_id, event_id } = req.body;
@@ -27,20 +27,20 @@ class EventUserController {
     });
 
     if (!eventExist) {
-      return res.status(401).json({ error: "Event does not found" });
+      return res.json({ error: "Event does not found" });
     }
 
-    if (eventExist.owner !== req.userId) {
-      return res.status(401).json({
-        error: "You don't have permission to add users to this event"
-      });
-    }
+    // if (eventExist.owner !== req.userId) {
+    //   return res.json({
+    //     error: "You don't have permission to add users to this event"
+    //   });
+    // }
 
     /**
      * Check if the user logged is equal to user_id
      */
-    if (req.userId === user_id) {
-      return res.status(401).json({ error: "You already belongsto event" });
+    if (eventExist.owner === user_id) {
+      return res.json({ error: "You already belongsto event" });
     }
 
     /**
@@ -49,7 +49,7 @@ class EventUserController {
     const userExist = await User.findByPk(user_id);
 
     if (!userExist) {
-      return res.status(401).json({ error: "User does not found" });
+      return res.json({ error: "User does not found" });
     }
 
     await userExist.addEvents(eventExist);

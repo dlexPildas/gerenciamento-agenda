@@ -11,13 +11,14 @@ export default function FormEvents({
   place,
   category,
   change,
-  handleSubmit
+  handleSubmit,
+  update
 }) {
   return (
     <Container>
       <Title>
         <FaCalendarPlus />
-        <h5>Crie um novo evento!</h5>
+        <h5> {update ? "Editar evento" : "Crie um novo evento!"} </h5>
       </Title>
 
       <input

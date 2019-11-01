@@ -14,7 +14,12 @@ class EventController {
      */
     if (all) {
       const event = await Event.findAll({
-        where: { owner: { [Op.ne]: req.userId } }
+        where: { owner: { [Op.ne]: req.userId } },
+        include: {
+          required: false,
+          association: "users",
+          where: { id: req.userId }
+        }
       });
 
       return res.json(event);
@@ -135,17 +140,18 @@ class EventController {
     /**
      * Data's validations
      */
+
     const schema = Yup.object().shape({
       event_id: Yup.number().required()
     });
 
-    if (!(await schema.isValid(req.body))) {
+    if (!(await schema.isValid(req.headers))) {
       return res.json({ error: "Validation fails" });
     }
 
     const user = await User.findByPk(req.userId);
 
-    const { event_id } = req.body;
+    const { event_id } = req.headers;
 
     const event = await Event.findByPk(event_id);
 

@@ -46,13 +46,6 @@ export const ListEvent = styled.ul`
     span {
       flex: 1;
     }
-
-    svg {
-      cursor: pointer;
-      &:hover {
-        transform: translateY(-2px);
-      }
-    }
   }
 `;
 
@@ -66,4 +59,18 @@ export const Subscribed = styled.div`
 export const ContainerForm = styled.div`
   width: 100%;
   margin: 40px 50px;
+`;
+
+export const Action = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  svg {
+    margin: 0 5px;
+    cursor: pointer;
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
 `;

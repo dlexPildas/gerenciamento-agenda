@@ -9,8 +9,6 @@ import { Container, Span } from "./styles";
 import { logout } from "../../services/auth";
 
 export default function Header({ page }) {
-  console.log(page);
-
   return (
     <Container>
       <nav>
