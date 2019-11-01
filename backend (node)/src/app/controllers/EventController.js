@@ -1,19 +1,41 @@
 const { startOfDay, parseISO, isBefore } = require("date-fns");
 const Yup = require("yup");
-
+const { Op } = require("sequelize");
 const User = require("../models/User");
 
 const Event = require("../models/Event");
 
 class EventController {
   async index(req, res) {
+    const { all } = req.params;
+
+    /**
+     * check if shall show all events
+     */
+    if (all) {
+      const event = await Event.findAll({
+        where: { owner: { [Op.ne]: req.userId } }
+      });
+
+      return res.json(event);
+    }
+
+    const events = await Event.findAll({
+      where: { owner: req.userId },
+      include: {
+        association: "user_owner"
+      }
+    });
     const user = await User.findByPk(req.userId, {
       include: {
         association: "events"
       }
     });
 
-    return res.json(user);
+    return res.json({
+      user,
+      events
+    });
   }
 
   async store(req, res) {

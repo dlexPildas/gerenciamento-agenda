@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 
-import { FaRegCalendarAlt } from "react-icons/fa";
+import { startOfDay, parseISO, format, isAfter, isEqual } from "date-fns";
+
+import { FaRegCalendarAlt, FaUserPlus } from "react-icons/fa";
 
 import api from "../../services/api";
 
@@ -28,12 +30,27 @@ export default class Main extends Component {
   };
 
   async componentDidMount() {
+    await this.loadEvents();
+
+    console.log(
+      format(parseISO(this.state.events[0].date_event), "MM/dd/yyyy")
+    );
+  }
+
+  loadEvents = async () => {
     const response = await api.get("/event");
 
-    this.setState({
-      events: response.data.events
+    await this.setState({
+      events: []
     });
-  }
+
+    this.setState({
+      events: this.state.events.concat(
+        response.data.events,
+        response.data.user.events
+      )
+    });
+  };
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -72,6 +89,8 @@ export default class Main extends Component {
         place: "",
         category: ""
       });
+
+      this.loadEvents();
     } catch (err) {
       alert("Erro ao criar o evento! Contate o suporte.");
       console.log(err);
@@ -79,11 +98,19 @@ export default class Main extends Component {
   };
 
   render() {
-    const { events, name, description, date_event, place } = this.state;
+    const {
+      events,
+      name,
+      description,
+      date_event,
+      place,
+      category
+    } = this.state;
 
     return (
       <>
         <Header page={1} />
+
         <Container>
           <ContainerEvents>
             <Events>
@@ -94,13 +121,29 @@ export default class Main extends Component {
 
               <ListEvent>
                 {events.length > 0 &&
-                  events.map(event => (
-                    <li key={event.id}>
-                      <strong>{event.name}</strong>
-                      <span>{event.date_event}</span>
-                      <span>{event.place}</span>
-                    </li>
-                  ))}
+                  events.map(
+                    event =>
+                      isEqual(
+                        parseISO(event.date_event),
+                        startOfDay(new Date())
+                      ) && (
+                        <li key={event.id}>
+                          <strong>{event.name}</strong>
+                          <span>{`${format(
+                            parseISO(event.date_event),
+                            "dd/MM/yyyy"
+                          )}`}</span>
+                          <span>{event.place}</span>
+
+                          {event.user_owner && (
+                            <FaUserPlus
+                              onClick={() => alert()}
+                              title="Adicionar um novo participante"
+                            />
+                          )}
+                        </li>
+                      )
+                  )}
               </ListEvent>
             </Events>
 
@@ -111,13 +154,22 @@ export default class Main extends Component {
               </Info>
               <ListEvent>
                 {events.length > 0 &&
-                  events.map(event => (
-                    <li key={event.id}>
-                      <strong>{event.name}</strong>
-                      <span>{event.date_event}</span>
-                      <span>{event.place}</span>
-                    </li>
-                  ))}
+                  events.map(
+                    event =>
+                      isAfter(
+                        parseISO(event.date_event),
+                        startOfDay(new Date())
+                      ) && (
+                        <li key={event.id}>
+                          <strong>{event.name}</strong>
+                          <span>{`${format(
+                            parseISO(event.date_event),
+                            "dd/MM/yyyy"
+                          )}`}</span>
+                          <span>{event.place}</span>
+                        </li>
+                      )
+                  )}
               </ListEvent>
             </Events>
           </ContainerEvents>
@@ -126,6 +178,7 @@ export default class Main extends Component {
               name={name}
               description={description}
               date_event={date_event}
+              category={category}
               place={place}
               change={this.handleChange}
               handleSubmit={this.handleSubmit}

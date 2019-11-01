@@ -24,7 +24,7 @@ export default function Header({ page }) {
       </nav>
       <Link to="/">
         <button onClick={() => logout()}>
-          <FaSignOutAlt size={25} color="#5b5e5d" />
+          <FaSignOutAlt size={25} color="#5b5e5d" title="Sair do sistema" />
         </button>
       </Link>
     </Container>

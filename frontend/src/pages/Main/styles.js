@@ -41,6 +41,18 @@ export const ListEvent = styled.ul`
     color: #fff;
     padding: 10px;
     border-radius: 10px;
+
+    strong,
+    span {
+      flex: 1;
+    }
+
+    svg {
+      cursor: pointer;
+      &:hover {
+        transform: translateY(-2px);
+      }
+    }
   }
 `;
 

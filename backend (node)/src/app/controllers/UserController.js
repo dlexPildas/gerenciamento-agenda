@@ -1,8 +1,24 @@
+const { Op } = require("sequelize");
+
 const Yup = require("yup");
 
 const User = require("../models/User");
+const Event = require("../models/Event");
 
 class UserController {
+  async index(req, res) {
+    /**
+     * Find all users and your events
+     */
+    const users = await User.findAll({
+      include: {
+        association: "events"
+      }
+    });
+
+    return res.json(users);
+  }
+
   async store(req, res) {
     /**
      * Data's validations

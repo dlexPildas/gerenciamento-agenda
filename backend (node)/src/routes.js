@@ -22,6 +22,7 @@ routes.post("/session", SessionController.store);
 /**
  * User's routes
  */
+routes.get("/user", authorization, UserController.index);
 routes.post("/user", UserController.store);
 
 /**
@@ -33,6 +34,7 @@ routes.post("/schedule", authorization, ScheduleController.store);
  * event's routes
  */
 routes.get("/event", authorization, EventController.index);
+routes.get("/event/:all", authorization, EventController.index);
 routes.post("/event", authorization, EventController.store);
 routes.put("/event", authorization, EventController.update);
 routes.delete("/event", authorization, EventController.delete);

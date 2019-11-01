@@ -40,6 +40,7 @@ export const Action = styled.div`
 
   div {
     svg {
+      cursor: pointer;
       &:hover {
         transform: translateY(-2px);
       }
