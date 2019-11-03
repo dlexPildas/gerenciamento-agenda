@@ -1,10 +1,23 @@
 import React, { Component } from "react";
 
-import { Container, ListUsers, SideLeft, SideRigth } from "./styles";
+import {
+  Container,
+  Info,
+  ListUsers,
+  SideLeft,
+  SideRigth,
+  Action
+} from "./styles";
 import FormEvents from "../../components/FormEvents";
 import api from "../../services/api";
 
-import { FaRegCalendarAlt, FaArrowLeft } from "react-icons/fa";
+import {
+  FaRegCalendarAlt,
+  FaArrowLeft,
+  FaUserCircle,
+  FaUserPlus,
+  FaTimesCircle
+} from "react-icons/fa";
 
 export default class UpdateEvents extends Component {
   state = {
@@ -18,17 +31,16 @@ export default class UpdateEvents extends Component {
   };
 
   async componentDidMount() {
-    const response = await api.get("/user");
-    const response2 = await api.get(`/event/${this.props.id_event}/true`);
+    const response = await api.get(`/event/${this.props.id_event}/true`);
 
     this.setState({
-      users: response.data,
-      event: response2.data,
-      name: response2.data.name,
-      description: response2.data.description,
-      date_event: response2.data.date_event,
-      category: response2.data.category,
-      place: response2.data.place
+      users: response.data.users,
+      event: response.data,
+      name: response.data.name,
+      description: response.data.description,
+      date_event: response.data.date_event,
+      category: response.data.category,
+      place: response.data.place
     });
   }
 
@@ -99,6 +111,11 @@ export default class UpdateEvents extends Component {
         </SideLeft>
 
         <SideRigth>
+          <Info>
+            <FaUserCircle />
+            <h5>Participantes do evento</h5>
+          </Info>
+
           <ListUsers>
             {users.length > 0 &&
               users.map(user => (
@@ -106,6 +123,9 @@ export default class UpdateEvents extends Component {
                   <strong>{user.id}</strong>
                   <span>{user.email}</span>
                   <span>{user.name}</span>
+                  <Action>
+                    <FaTimesCircle />
+                  </Action>
                 </li>
               ))}
           </ListUsers>

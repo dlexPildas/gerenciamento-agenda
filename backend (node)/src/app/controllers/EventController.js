@@ -57,7 +57,12 @@ class EventController {
       return res.json({ error: "Validation fails" });
     }
 
-    const event = await Event.findByPk(id);
+    const event = await Event.findOne({
+      where: { id },
+      include: {
+        association: "users"
+      }
+    });
 
     if (!event) {
       return res.json({ error: "Event does not found" });

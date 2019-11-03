@@ -33,7 +33,7 @@ export default class FormEvents extends React.Component {
         />
         <input
           type="date"
-          value={"01-02-2019"}
+          value={this.props.date_event}
           name="date_event"
           onChange={this.props.change}
           placeholder="data"
