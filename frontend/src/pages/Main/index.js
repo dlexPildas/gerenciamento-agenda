@@ -34,7 +34,7 @@ export default class Main extends Component {
     date_event: Date(),
     place: "",
     category: "",
-    updateEvents: false
+    updateEvents: 0
   };
 
   async componentDidMount() {
@@ -63,15 +63,16 @@ export default class Main extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleChangeUpdateEvent = () => {
+  handleChangeUpdateEvent = event_id => {
     const { updateEvents } = this.state;
 
     updateEvents
-      ? this.setState({ updateEvents: false })
-      : this.setState({ updateEvents: true });
+      ? this.setState({ updateEvents: 0 })
+      : this.setState({ updateEvents: event_id });
 
-    return console.log(updateEvents);
+    this.loadEvents();
   };
+
   /**
    * function to delete a event
    */
@@ -218,7 +219,9 @@ export default class Main extends Component {
                                   title="Excluir o evento"
                                 />
                                 <FaEdit
-                                  onClick={() => this.handleChangeUpdateEvent()}
+                                  onClick={() =>
+                                    this.handleChangeUpdateEvent(event.id)
+                                  }
                                   title="Editar um evento"
                                 />
                               </Action>
@@ -242,7 +245,10 @@ export default class Main extends Component {
             </ContainerForm>
           </Container>
         ) : (
-          <UpdateEvents change={this.handleChangeUpdateEvent} />
+          <UpdateEvents
+            id_event={this.state.updateEvents}
+            change={this.handleChangeUpdateEvent}
+          />
         )}
       </>
     );

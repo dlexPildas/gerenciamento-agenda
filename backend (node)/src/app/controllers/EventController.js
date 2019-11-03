@@ -43,6 +43,29 @@ class EventController {
     });
   }
 
+  async show(req, res) {
+    const { id, name } = req.params;
+
+    /**
+     * Data's validations
+     */
+    const schema = Yup.object().shape({
+      id: Yup.number().required()
+    });
+
+    if (!(await schema.isValid(req.params))) {
+      return res.json({ error: "Validation fails" });
+    }
+
+    const event = await Event.findByPk(id);
+
+    if (!event) {
+      return res.json({ error: "Event does not found" });
+    }
+
+    return res.json(event);
+  }
+
   async store(req, res) {
     /**
      * Data's validations
@@ -101,6 +124,8 @@ class EventController {
   }
 
   async update(req, res) {
+    console.log(req.body);
+
     /**
      * Data's validations
      */

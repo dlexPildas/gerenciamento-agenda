@@ -59,6 +59,7 @@ export const Subscribed = styled.div`
 export const ContainerForm = styled.div`
   width: 100%;
   margin: 40px 50px;
+  padding: 0 50px;
 `;
 
 export const Action = styled.div`

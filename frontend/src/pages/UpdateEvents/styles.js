@@ -36,10 +36,12 @@ export const SideLeft = styled.div`
   flex: 1;
   display: flex;
   justify-content: space-between;
+  padding: 0 30px;
 `;
 
 export const SideRigth = styled.div`
   flex: 1;
   display: flex;
   justify-content: space-between;
+  padding: 30px 10px;
 `;

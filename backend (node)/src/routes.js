@@ -35,6 +35,7 @@ routes.post("/schedule", authorization, ScheduleController.store);
  */
 routes.get("/event", authorization, EventController.index);
 routes.get("/event/:all", authorization, EventController.index);
+routes.get("/event/:id/:name", authorization, EventController.show);
 routes.post("/event", authorization, EventController.store);
 routes.put("/event", authorization, EventController.update);
 routes.delete("/event", authorization, EventController.delete);
