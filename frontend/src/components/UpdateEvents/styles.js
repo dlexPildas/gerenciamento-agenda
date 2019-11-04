@@ -48,6 +48,7 @@ export const ListUsers = styled.ul`
 export const SideLeft = styled.div`
   flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding: 0 30px;
 `;
@@ -71,5 +72,18 @@ export const Action = styled.div`
     &:hover {
       transform: translateY(-2px);
     }
+  }
+`;
+
+export const Voltar = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 30px;
+
+  button {
+    border-radius: 5px;
+    padding: 5px;
+    color: #666;
   }
 `;

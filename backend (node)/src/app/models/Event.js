@@ -8,6 +8,7 @@ class Event extends Model {
         name: Sequelize.STRING,
         description: Sequelize.STRING,
         date_event: Sequelize.DATE,
+        date_event_final: Sequelize.DATE,
         place: Sequelize.STRING,
         category: Sequelize.STRING
       },

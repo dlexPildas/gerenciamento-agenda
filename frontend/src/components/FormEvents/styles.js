@@ -64,3 +64,37 @@ export const Title = styled.div`
     border-radius: 10px;
   }
 `;
+
+export const Dates = styled.div`
+  margin: 10px 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  label {
+    display: flex;
+    flex-direction: column;
+
+    span {
+      width: 50%;
+      border: 2px solid #666;
+      border-bottom: 0;
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
+      color: #666;
+      padding-left: 10px;
+      font-weight: bold;
+      font-size: 10px;
+    }
+    input {
+      border: 2px solid #666;
+      border-radius: 10px;
+      border-top-left-radius: 0;
+      margin-bottom: 0px;
+      color: #666;
+      font-size: 12px;
+    }
+  }
+`;

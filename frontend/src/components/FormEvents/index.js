@@ -4,7 +4,7 @@ import { startOfDay, parseISO, format } from "date-fns";
 
 import { FaCalendarPlus, FaPlusCircle } from "react-icons/fa";
 
-import { Container, Title } from "./styles";
+import { Container, Title, Dates } from "./styles";
 
 export default class FormEvents extends React.Component {
   render() {
@@ -24,6 +24,7 @@ export default class FormEvents extends React.Component {
           onChange={this.props.change}
           placeholder="nome"
         />
+
         <input
           type="text"
           value={this.props.description}
@@ -31,13 +32,28 @@ export default class FormEvents extends React.Component {
           onChange={this.props.change}
           placeholder="descrição"
         />
-        <input
-          type="date"
-          value={this.props.date_event}
-          name="date_event"
-          onChange={this.props.change}
-          placeholder="data"
-        />
+        <Dates>
+          <label>
+            <span>Data início:</span>
+            <input
+              type="datetime-local"
+              value={this.props.date_event}
+              name="date_event"
+              onChange={this.props.change}
+              placeholder="data"
+            />
+          </label>
+          <label>
+            <span>Data fim:</span>
+            <input
+              type="datetime-local"
+              value={this.props.date_event_final}
+              name="date_event_final"
+              onChange={this.props.change}
+              placeholder="data"
+            />
+          </label>
+        </Dates>
         <input
           type="text"
           value={this.props.place}
@@ -45,7 +61,6 @@ export default class FormEvents extends React.Component {
           onChange={this.props.change}
           placeholder="local"
         />
-
         <input
           type="text"
           value={this.props.category}

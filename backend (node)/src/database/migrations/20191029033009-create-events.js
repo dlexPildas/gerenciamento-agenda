@@ -25,6 +25,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
+      date_event_final: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
       owner: {
         type: Sequelize.INTEGER,
         references: { model: "users", key: "id" },

@@ -1,0 +1,60 @@
+SELECT "id", "name", "email", "password_hash", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "users" AS "User" WHERE "User"."id" = 3;
+Executing (default): SELECT "id", "name", "description", "date_event", "place", "category", "created_at" AS "createdAt", "updated_at" AS "updatedAt", "owner" 
+FROM "events" AS "Event" WHERE "Event"."owner" = 3 AND "Event"."date_event" = '2019-11-05 03:00:00.000 +00:00' LIMIT 1;
+
+
+INSERT INTO "events" ("id","name","description","date_event","place","category","created_at","updated_at","owner") 
+VALUES (DEFAULT,$1,$2,$3,$4,$5,$6,$7,$8) RETURNING *;
+
+
+SELECT "Event"."id", "Event"."name", "Event"."description", "Event"."date_event", "Event"."place", "Event"."category", "Event"."created_at" AS "createdAt", 
+"Event"."updated_at" AS "updatedAt", "Event"."owner", "user_owner"."id" AS "user_owner.id", "user_owner"."name" AS "user_owner.name", "user_owner"."email" AS "user_owner.email", 
+"user_owner"."password_hash" AS "user_owner.password_hash", "user_owner"."created_at" AS "user_owner.createdAt", "user_owner"."updated_at" AS "user_owner.updatedAt" FROM "events" 
+AS "Event" LEFT OUTER JOIN "users" AS "user_owner" ON "Event"."owner" = "user_owner"."id" WHERE "Event"."owner" = 3;
+
+
+SELECT "User"."id", "User"."name", "User"."email", "User"."password_hash", "User"."created_at" AS "createdAt", "User"."updated_at" AS "updatedAt", "events"."id" AS "events.id", 
+"events"."name" AS "events.name", "events"."description" AS "events.description", "events"."date_event" AS "events.date_event", "events"."place" AS "events.place",
+"events"."category" AS "events.category", "events"."created_at" AS "events.createdAt", "events"."updated_at" AS "events.updatedAt", "events"."owner" AS "events.owner", 
+"events->event_users"."created_at" AS "events.event_users.createdAt", "events->event_users"."updated_at" AS "events.event_users.updatedAt", "events->event_users"."user_id" 
+AS "events.event_users.user_id", "events->event_users"."event_id" AS "events.event_users.event_id" FROM "users" AS "User" 
+LEFT OUTER JOIN ( "event_users" AS "events->event_users" INNER JOIN "events" AS "events" ON "events"."id" = "events->event_users"."event_id") ON 
+"User"."id" = "events->event_users"."user_id" WHERE "User"."id" = 3;
+
+
+SELECT "Event"."id", "Event"."name", "Event"."description", "Event"."date_event", "Event"."place", "Event"."category", "Event"."created_at" AS "createdAt", 
+"Event"."updated_at" AS "updatedAt", "Event"."owner", "user_owner"."id" AS "user_owner.id", "user_owner"."name" AS "user_owner.name", "user_owner"."email" AS "user_owner.email",
+"user_owner"."password_hash" AS "user_owner.password_hash", "user_owner"."created_at" AS "user_owner.createdAt", "user_owner"."updated_at" AS "user_owner.updatedAt" 
+FROM "events" AS "Event" LEFT OUTER JOIN "users" AS "user_owner" ON "Event"."owner" = "user_owner"."id" WHERE "Event"."owner" = 3;
+
+
+SELECT "Event"."id", "Event"."name", "Event"."description", "Event"."date_event", "Event"."place", "Event"."category", "Event"."created_at" AS "createdAt", 
+"Event"."updated_at" AS "updatedAt", "Event"."owner", "users"."id" AS "users.id", "users"."name" AS "users.name", "users"."email" AS "users.email", "users"."password_hash" 
+AS "users.password_hash", "users"."created_at" AS "users.createdAt", "users"."updated_at" AS "users.updatedAt", "users->event_users"."created_at" AS "users.event_users.createdAt",
+ "users->event_users"."updated_at" AS "users.event_users.updatedAt", "users->event_users"."user_id" AS "users.event_users.user_id", "users->event_users"."event_id" 
+ AS "users.event_users.event_id" FROM "events" AS "Event" LEFT OUTER JOIN ( "event_users" AS "users->event_users" INNER JOIN "users" AS "users" ON 
+ "users"."id" = "users->event_users"."user_id") ON "Event"."id" = "users->event_users"."event_id" WHERE "Event"."id" = '23';
+
+
+SELECT "User"."id", "User"."name", "User"."email", "User"."password_hash", "User"."created_at" AS "createdAt", "User"."updated_at" AS "updatedAt", "events"."id" AS "events.id", 
+"events"."name" AS "events.name", "events"."description" AS "events.description", "events"."date_event" AS "events.date_event", "events"."place" AS "events.place", 
+"events"."category" AS "events.category", "events"."created_at" AS "events.createdAt", "events"."updated_at" AS "events.updatedAt", "events"."owner" 
+AS "events.owner", "events->event_users"."created_at" AS "events.event_users.createdAt", "events->event_users"."updated_at" AS "events.event_users.updatedAt", 
+"events->event_users"."user_id" AS "events.event_users.user_id", "events->event_users"."event_id" AS "events.event_users.event_id" 
+FROM "users" AS "User" LEFT OUTER JOIN ( "event_users" AS "events->event_users" INNER JOIN "events" AS "events" ON "events"."id" = "events->event_users"."event_id") ON 
+"User"."id" = "events->event_users"."user_id" WHERE "User"."id" = 3;
+
+
+SELECT "Event"."id", "Event"."name", "Event"."description", "Event"."date_event", "Event"."place", "Event"."category", "Event"."created_at" AS "createdAt", 
+"Event"."updated_at" AS "updatedAt", "Event"."owner", "user_owner"."id" AS "user_owner.id", "user_owner"."name" AS "user_owner.name", "user_owner"."email" AS "user_owner.email",
+ "user_owner"."password_hash" AS "user_owner.password_hash", "user_owner"."created_at" AS "user_owner.createdAt", "user_owner"."updated_at" AS "user_owner.updatedAt" 
+ FROM "events" AS "Event" LEFT OUTER JOIN "users" AS "user_owner" ON "Event"."owner" = "user_owner"."id" WHERE "Event"."owner" = 3;
+
+
+SELECT "User"."id", "User"."name", "User"."email", "User"."password_hash", "User"."created_at" AS "createdAt", "User"."updated_at" AS "updatedAt", "events"."id" AS "events.id",
+ "events"."name" AS "events.name", "events"."description" AS "events.description", "events"."date_event" AS "events.date_event", "events"."place" AS "events.place", 
+ "events"."category" AS "events.category", "events"."created_at" AS "events.createdAt", "events"."updated_at" AS "events.updatedAt", "events"."owner" AS "events.owner", 
+ "events->event_users"."created_at" AS "events.event_users.createdAt", "events->event_users"."updated_at" AS "events.event_users.updatedAt", "events->event_users"."user_id" AS 
+ "events.event_users.user_id", "events->event_users"."event_id" AS "events.event_users.event_id" FROM "users" AS "User"
+  LEFT OUTER JOIN ( "event_users" AS "events->event_users" INNER JOIN "events" AS "events" ON "events"."id" = "events->event_users"."event_id") ON 
+  "User"."id" = "events->event_users"."user_id" WHERE "User"."id" = 3;

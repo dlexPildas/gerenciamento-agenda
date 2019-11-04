@@ -45,8 +45,25 @@ export const ListEvent = styled.ul`
     strong,
     span {
       flex: 1;
+      text-align: center;
     }
   }
+`;
+
+export const Dates = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const DateEvent = styled.span`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  background: #666;
+  border-radius: 5px;
+  margin: 2px 0;
+  padding: 2px 0;
 `;
 
 export const Subscribed = styled.div`

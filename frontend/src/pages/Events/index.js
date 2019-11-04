@@ -1,13 +1,21 @@
 import React, { Component } from "react";
 
-import { FaEye, FaCalendarPlus, FaRegSadTear } from "react-icons/fa";
+import { FaEye, FaCalendarPlus } from "react-icons/fa";
 
 import { startOfDay, parseISO, format, isAfter, isEqual } from "date-fns";
 
 import api from "../../services/api";
 import { getId } from "../../services/auth";
 
-import { Container, ListEvent, Action, ButtonParticipate } from "./styles";
+import {
+  Container,
+  Filter,
+  ListEvent,
+  Dates,
+  DateEvent,
+  Action,
+  ButtonParticipate
+} from "./styles";
 
 import Header from "../../components/Header";
 import ContainerEvents from "../../components/ContainerEvents/index";
@@ -21,7 +29,38 @@ export default class Events extends Component {
     this.loadEvents();
   }
 
-  loadEvents = async () => {
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  loadEvents = async (date, param) => {
+    if (date) {
+      let response = await api.get(`/event/${1}`, {
+        headers: {
+          date_filter: document.getElementById("date_filter").value
+        }
+      });
+      //check if the param is equal to 1 to add to url the headers of text's filter
+      if (param === 1) {
+        response = await api.get(`/event/${1}`, {
+          headers: {
+            date_filter: document.getElementById("date_filter").value,
+            text_filter: document.getElementById("text_filter").value
+          }
+        });
+      }
+
+      if (response.data.error) {
+        return alert(response.data.error);
+      }
+
+      this.setState({
+        events: response.data
+      });
+
+      return;
+    }
+
     const response = await api.get(`/event/${1}`);
 
     this.setState({
@@ -44,44 +83,78 @@ export default class Events extends Component {
   };
 
   render() {
-    const { events } = this.state;
-
     return (
       <>
         <Header page={2} />
         <Container>
           <ContainerEvents>
+            <Filter>
+              <input
+                id="date_filter"
+                type="date"
+                name="data"
+                onChange={() => this.loadEvents("date", 0)}
+              />
+
+              <input
+                id="text_filter"
+                type="text"
+                placeholder="buscar"
+                onChange={() => this.loadEvents("date", 1)}
+              />
+            </Filter>
             <ListEvent>
-              {events &&
-                events.map(
-                  event =>
-                    isAfter(
+              {this.state.events.map(
+                event =>
+                  (isAfter(
+                    parseISO(event.date_event),
+                    startOfDay(new Date())
+                  ) ||
+                    isEqual(
                       parseISO(event.date_event),
                       startOfDay(new Date())
-                    ) &&
-                    event.users.length === 0 && (
-                      <li key={event.id}>
-                        <strong>{event.name}</strong>
-                        <span>{`${format(
+                    )) && (
+                    <li key={event.id}>
+                      {console.log(event)}
+                      <strong>{event.name}</strong>
+                      <Dates>
+                        <DateEvent>{`${format(
                           parseISO(event.date_event),
-                          "dd/MM/yyyy"
-                        )}`}</span>
-                        <span>{event.place}</span>
-                        <Action>
-                          <div>
-                            <FaEye />
-                          </div>
+                          "dd/MM/yyyy hh:mm a"
+                        )}`}</DateEvent>
+                        <DateEvent>{`${format(
+                          parseISO(event.date_event_final),
+                          "dd/MM/yyyy hh:mm a"
+                        )}`}</DateEvent>
+                      </Dates>
 
-                          <ButtonParticipate
-                            onClick={() => this.handleParticipate(event.id)}
-                          >
-                            <FaCalendarPlus />
-                            <span>Participar</span>
-                          </ButtonParticipate>
-                        </Action>
-                      </li>
-                    )
-                )}
+                      <span>{event.place}</span>
+                      <Action>
+                        <div>
+                          <FaEye />
+                        </div>
+
+                        <ButtonParticipate
+                          onClick={() =>
+                            event.users.length !== 0
+                              ? alert("Você já faz parte deste evento")
+                              : this.handleParticipate(event.id)
+                          }
+                        >
+                          <FaCalendarPlus />
+                          <span>
+                            {event.owner === parseInt(getId())
+                              ? "Meu evento"
+                              : event.users.length === 0
+                              ? "Participar"
+                              : "Já faço parte"}
+                          </span>
+                        </ButtonParticipate>
+                      </Action>
+                    </li>
+                  )
+              )}
+              {/*  */}
             </ListEvent>
           </ContainerEvents>
         </Container>

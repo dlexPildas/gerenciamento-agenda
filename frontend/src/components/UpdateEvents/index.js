@@ -6,18 +6,13 @@ import {
   ListUsers,
   SideLeft,
   SideRigth,
-  Action
+  Action,
+  Voltar
 } from "./styles";
-import FormEvents from "../../components/FormEvents";
+import FormEvents from "../FormEvents";
 import api from "../../services/api";
 
-import {
-  FaRegCalendarAlt,
-  FaArrowLeft,
-  FaUserCircle,
-  FaUserPlus,
-  FaTimesCircle
-} from "react-icons/fa";
+import { FaArrowLeft, FaUserCircle, FaTimesCircle } from "react-icons/fa";
 
 export default class UpdateEvents extends Component {
   state = {
@@ -97,7 +92,7 @@ export default class UpdateEvents extends Component {
     return (
       <Container>
         <SideLeft>
-          <FaArrowLeft onClick={this.props.change} />
+          {/* <FaArrowLeft onClick={this.props.change} /> */}
           <FormEvents
             update={1}
             name={name}
@@ -108,6 +103,9 @@ export default class UpdateEvents extends Component {
             change={this.handleChange}
             handleSubmit={this.handleSubmit}
           />
+          <Voltar>
+            <button onClick={this.props.change}>Voltar</button>
+          </Voltar>
         </SideLeft>
 
         <SideRigth>
@@ -130,8 +128,6 @@ export default class UpdateEvents extends Component {
               ))}
           </ListUsers>
         </SideRigth>
-
-        {/*  */}
       </Container>
     );
   }

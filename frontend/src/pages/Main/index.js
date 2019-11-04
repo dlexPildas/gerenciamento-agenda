@@ -18,13 +18,16 @@ import {
   ContainerEvents,
   Info,
   ListEvent,
+  Dates,
+  DateEvent,
   ContainerForm,
   Action
 } from "./styles";
 
 import Events from "../../components/ContainerEvents";
 import FormEvent from "../../components/FormEvents";
-import UpdateEvents from "../UpdateEvents";
+import UpdateEvents from "../../components/UpdateEvents";
+import ListUsers from "../../components/ListUsers";
 
 export default class Main extends Component {
   state = {
@@ -32,9 +35,11 @@ export default class Main extends Component {
     name: "",
     description: "",
     date_event: Date(),
+    date_event_final: Date(),
     place: "",
     category: "",
-    updateEvents: 0
+    updateEvents: 0,
+    addUsers: 0
   };
 
   async componentDidMount() {
@@ -73,6 +78,16 @@ export default class Main extends Component {
     this.loadEvents();
   };
 
+  handleChangeListUsers = event_id => {
+    const { addUsers } = this.state;
+
+    addUsers
+      ? this.setState({ addUsers: 0 })
+      : this.setState({ addUsers: event_id });
+
+    this.loadEvents();
+  };
+
   /**
    * function to delete a event
    */
@@ -94,12 +109,20 @@ export default class Main extends Component {
    * function to create a event
    */
   handleSubmit = async () => {
-    const { name, description, date_event, place, category } = this.state;
+    const {
+      name,
+      description,
+      date_event,
+      date_event_final,
+      place,
+      category
+    } = this.state;
 
     if (
       name === "" ||
       description === "" ||
       date_event === "" ||
+      date_event_final === "" ||
       place === "" ||
       category === ""
     ) {
@@ -111,6 +134,7 @@ export default class Main extends Component {
         name,
         description,
         date_event,
+        date_event_final,
         place,
         category
       });
@@ -123,6 +147,7 @@ export default class Main extends Component {
         name: "",
         description: "",
         date_event: Date(),
+        date_event_final: Date(),
         place: "",
         category: ""
       });
@@ -139,6 +164,7 @@ export default class Main extends Component {
       name,
       description,
       date_event,
+      date_event_final,
       place,
       category
     } = this.state;
@@ -166,10 +192,16 @@ export default class Main extends Component {
                         ) && (
                           <li key={event.id}>
                             <strong>{event.name}</strong>
-                            <span>{`${format(
-                              parseISO(event.date_event),
-                              "dd/MM/yyyy"
-                            )}`}</span>
+                            <Dates>
+                              <DateEvent>{`${format(
+                                parseISO(event.date_event),
+                                "dd/MM/yyyy hh:mm a"
+                              )}`}</DateEvent>
+                              <DateEvent>{`${format(
+                                parseISO(event.date_event_final),
+                                "dd/MM/yyyy hh:mm a"
+                              )}`}</DateEvent>
+                            </Dates>
                             <span>{event.place}</span>
 
                             {event.user_owner && (
@@ -201,15 +233,23 @@ export default class Main extends Component {
                         ) && (
                           <li key={event.id}>
                             <strong>{event.name}</strong>
-                            <span>{`${format(
-                              parseISO(event.date_event),
-                              "dd/MM/yyyy"
-                            )}`}</span>
+                            <Dates>
+                              <DateEvent>{`${format(
+                                parseISO(event.date_event),
+                                "dd/MM/yyyy hh:mm a"
+                              )}`}</DateEvent>
+                              <DateEvent>{`${format(
+                                parseISO(event.date_event_final),
+                                "dd/MM/yyyy hh:mm a"
+                              )}`}</DateEvent>
+                            </Dates>
                             <span>{event.place}</span>
                             {event.user_owner && (
                               <Action>
                                 <FaUserPlus
-                                  onClick={() => alert()}
+                                  onClick={() =>
+                                    this.handleChangeListUsers(event.id)
+                                  }
                                   title="Adicionar um novo participante"
                                 />
                                 <FaTimesCircle
@@ -233,15 +273,23 @@ export default class Main extends Component {
               </Events>
             </ContainerEvents>
             <ContainerForm>
-              <FormEvent
-                name={name}
-                description={description}
-                date_event={date_event}
-                category={category}
-                place={place}
-                change={this.handleChange}
-                handleSubmit={this.handleSubmit}
-              />
+              {!this.state.addUsers ? (
+                <FormEvent
+                  name={name}
+                  description={description}
+                  date_event={date_event}
+                  date_event_final={date_event_final}
+                  category={category}
+                  place={place}
+                  change={this.handleChange}
+                  handleSubmit={this.handleSubmit}
+                />
+              ) : (
+                <ListUsers
+                  event_id={this.state.addUsers}
+                  change={this.handleChangeListUsers}
+                />
+              )}
             </ContainerForm>
           </Container>
         ) : (

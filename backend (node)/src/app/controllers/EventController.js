@@ -1,4 +1,14 @@
-const { startOfDay, parseISO, isBefore, addDays } = require("date-fns");
+const {
+  startOfDay,
+  endOfDay,
+  isAfter,
+  parseISO,
+  isBefore,
+  addDays,
+  startOfMinute,
+  endOfMinute
+} = require("date-fns");
+
 const Yup = require("yup");
 const { Op } = require("sequelize");
 const User = require("../models/User");
@@ -123,6 +133,7 @@ class EventController {
       name: Yup.string().required(),
       description: Yup.string().required(),
       date_event: Yup.date().required(),
+      date_event_final: Yup.date().required(),
       place: Yup.string().required(),
       category: Yup.string().required()
     });
@@ -133,16 +144,28 @@ class EventController {
 
     const userExist = await User.findByPk(req.userId);
 
-    const { name, description, date_event, place, category } = req.body;
+    const {
+      name,
+      description,
+      date_event,
+      date_event_final,
+      place,
+      category
+    } = req.body;
 
     if (!userExist) {
       return res.json({ error: "User does not exist" });
     }
 
-    /**
-     * convert date_event and verify if date_event is past
-     */
-    const dateStart = startOfDay(parseISO(date_event));
+    // /**
+    //  * convert date_event and verify if date_event is past
+    //  */
+    const dateStart = startOfMinute(parseISO(date_event));
+    const dateFinal = startOfMinute(parseISO(date_event_final));
+
+    if (isAfter(dateStart, dateFinal)) {
+      return res.json({ error: "Initial date is after than final date" });
+    }
     if (isBefore(dateStart, new Date())) {
       return res.json({ error: "Date is past" });
     }
@@ -151,19 +174,23 @@ class EventController {
      * find to event and verify if exist
      */
     const eventExist = await Event.findOne({
-      where: { owner: req.userId, date_event: dateStart }
+      where: {
+        owner: req.userId,
+        date_event: {
+          [Op.between]: [dateStart, dateFinal]
+        }
+      }
     });
 
     if (eventExist) {
-      return res
-        .status(401)
-        .json({ error: "Already exist a event to this date" });
+      return res.json({ error: "Already exist a event to this date and hour" });
     }
 
     const event = await Event.create({
       name,
       description,
       date_event: dateStart,
+      date_event_final: dateFinal,
       place,
       category,
       owner: req.userId
