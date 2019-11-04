@@ -1,4 +1,4 @@
-const { startOfDay, parseISO, isBefore } = require("date-fns");
+const { startOfDay, parseISO, isBefore, addDays } = require("date-fns");
 const Yup = require("yup");
 const { Op } = require("sequelize");
 const User = require("../models/User");
@@ -7,14 +7,58 @@ const Event = require("../models/Event");
 
 class EventController {
   async index(req, res) {
+    const { date_filter, text_filter } = req.headers;
     const { all } = req.params;
+
+    /**
+     * check if thehe is a filter and find to events
+     */
+
+    if (text_filter) {
+      const event = await Event.findAll({
+        where: {
+          [Op.or]: [
+            { name: { [Op.iLike]: "%" + text_filter + "%" } },
+            { description: { [Op.iLike]: "%" + text_filter + "%" } },
+            { place: { [Op.iLike]: "%" + text_filter + "%" } }
+          ]
+        },
+        include: {
+          required: false,
+          association: "users",
+          where: { id: req.userId }
+        }
+      });
+
+      return res.json(event);
+    }
+
+    if (date_filter) {
+      /**
+       * convert date_event and verify if date_event is past
+       */
+      const dateStart = startOfDay(parseISO(date_filter));
+      if (isBefore(addDays(dateStart, 1), new Date())) {
+        return res.json({ error: "Date is past" });
+      }
+
+      const event = await Event.findAll({
+        where: { date_event: dateStart },
+        include: {
+          required: false,
+          association: "users",
+          where: { id: req.userId }
+        }
+      });
+
+      return res.json(event);
+    }
 
     /**
      * check if shall show all events
      */
     if (all) {
       const event = await Event.findAll({
-        where: { owner: { [Op.ne]: req.userId } },
         include: {
           required: false,
           association: "users",

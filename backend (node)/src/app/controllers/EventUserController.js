@@ -1,5 +1,5 @@
 const Yup = require("yup");
-
+const { Op } = require("sequelize");
 const User = require("../models/User");
 const Event = require("../models/Event");
 
@@ -55,6 +55,37 @@ class EventUserController {
     await userExist.addEvents(eventExist);
 
     return res.json(userExist);
+  }
+
+  async index(req, res) {
+    const { event_id } = req.params;
+
+    //find to event
+    const event = await Event.findByPk(event_id);
+
+    //find all users
+    let users = await User.findAll({
+      where: { id: { [Op.ne]: event.owner } }
+    });
+
+    //find users who participate of the event
+    const usersEvent = await event.getUsers({ attributes: ["id"] });
+
+    let deletou = false;
+    for (let i = 0; i < users.length; i++) {
+      for (let j = 0; j < usersEvent.length; j++) {
+        if (users[i].id === usersEvent[j].id) {
+          users.splice(i, 1);
+          deletou = true;
+        }
+      }
+      if (deletou === true) {
+        i--;
+        deletou = false;
+      }
+    }
+
+    return res.json({ users, name_event: event.name });
   }
 }
 

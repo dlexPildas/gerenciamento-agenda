@@ -44,5 +44,5 @@ routes.delete("/event", authorization, EventController.delete);
  * EventUser's routes
  */
 routes.post("/userToEvent", authorization, EventUserController.store);
-
+routes.get("/userToEvent/:event_id", authorization, EventUserController.index);
 module.exports = routes;

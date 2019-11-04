@@ -12,8 +12,12 @@ class UserController {
      */
     const users = await User.findAll({
       where: { id: { [Op.ne]: req.userId } },
+
       include: {
-        association: "events"
+        required: true,
+        association: "events",
+        attributes: ["id"],
+        where: { id: 5 }
       }
     });
 
