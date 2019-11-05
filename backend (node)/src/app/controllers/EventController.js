@@ -47,13 +47,18 @@ class EventController {
       /**
        * convert date_event and verify if date_event is past
        */
-      const dateStart = startOfDay(parseISO(date_filter));
+      const dateStart = startOfMinute(parseISO(date_filter));
+
       if (isBefore(addDays(dateStart, 1), new Date())) {
         return res.json({ error: "Date is past" });
       }
 
       const event = await Event.findAll({
-        where: { date_event: dateStart },
+        where: {
+          date_event: {
+            [Op.between]: [startOfDay(dateStart), endOfDay(dateStart)]
+          }
+        },
         include: {
           required: false,
           association: "users",
@@ -160,6 +165,7 @@ class EventController {
     // /**
     //  * convert date_event and verify if date_event is past
     //  */
+
     const dateStart = startOfMinute(parseISO(date_event));
     const dateFinal = startOfMinute(parseISO(date_event_final));
 
@@ -173,17 +179,36 @@ class EventController {
     /**
      * find to event and verify if exist
      */
-    const eventExist = await Event.findOne({
+    const eventExist = await Event.findAll({
       where: {
         owner: req.userId,
+        category: "exclusivo",
         date_event: {
-          [Op.between]: [dateStart, dateFinal]
+          [Op.between]: [
+            startOfDay(parseISO(date_event)),
+            endOfDay(parseISO(date_event))
+          ]
         }
       }
     });
 
-    if (eventExist) {
-      return res.json({ error: "Already exist a event to this date and hour" });
+    if (eventExist && category === "exclusivo") {
+      let error = false;
+      eventExist.map(async event => {
+        if (isBefore(dateStart, event.date_event)) {
+          if (!isBefore(dateFinal, event.date_event)) {
+            error = true;
+          }
+        } else if (!isAfter(dateStart, event.date_event_final)) {
+          error = true;
+        }
+      });
+
+      if (error) {
+        return res.json({
+          error: "Already exist a event to this date and hour"
+        });
+      }
     }
 
     const event = await Event.create({
@@ -200,8 +225,6 @@ class EventController {
   }
 
   async update(req, res) {
-    console.log(req.body);
-
     /**
      * Data's validations
      */

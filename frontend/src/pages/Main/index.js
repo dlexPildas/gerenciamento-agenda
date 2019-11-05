@@ -37,7 +37,7 @@ export default class Main extends Component {
     date_event: Date(),
     date_event_final: Date(),
     place: "",
-    category: "",
+    category: "exclusivo",
     updateEvents: 0,
     addUsers: 0
   };

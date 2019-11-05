@@ -63,6 +63,7 @@ export const DateEvent = styled.span`
   border-radius: 5px;
   margin: 2px 0;
   padding: 2px 0;
+  font-size: 10px;
 `;
 
 export const Action = styled.div`

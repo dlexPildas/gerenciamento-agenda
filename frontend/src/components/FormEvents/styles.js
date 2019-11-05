@@ -8,7 +8,8 @@ export const Container = styled.div`
   @media (max-width: 900px) {
     margin-right: 50px;
   }
-  input {
+  input,
+  select {
     width: 100%;
     margin-bottom: 15px;
     padding: 10px;
@@ -92,7 +93,7 @@ export const Dates = styled.div`
       border: 2px solid #666;
       border-radius: 10px;
       border-top-left-radius: 0;
-      margin-bottom: 0px;
+      margin-bottom: 10px;
       color: #666;
       font-size: 12px;
     }

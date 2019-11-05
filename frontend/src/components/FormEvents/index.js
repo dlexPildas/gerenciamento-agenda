@@ -61,13 +61,21 @@ export default class FormEvents extends React.Component {
           onChange={this.props.change}
           placeholder="local"
         />
-        <input
+        <select
+          name="category"
+          value={this.props.category}
+          onChange={this.props.change}
+        >
+          <option>compartilhado</option>
+          <option>exclusivo</option>
+        </select>
+        {/* <input
           type="text"
           value={this.props.category}
           name="category"
           onChange={this.props.change}
           placeholder="categoria"
-        />
+        /> */}
 
         <button onClick={this.props.handleSubmit}>
           {this.props.update ? "Atualizar" : <FaPlusCircle />}
