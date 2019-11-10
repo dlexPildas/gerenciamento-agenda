@@ -39,7 +39,7 @@ class UserController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: "Validation fails" });
+      return res.json({ error: "Validation fails" });
     }
 
     const userExist = await User.findOne({
@@ -47,7 +47,7 @@ class UserController {
     });
 
     if (userExist) {
-      return res.status(401).json({ error: "User already exist!" });
+      return res.json({ error: "User already exist!" });
     }
 
     const { id, name, email } = await User.create(req.body);

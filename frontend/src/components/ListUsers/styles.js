@@ -1,4 +1,14 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const form = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
 
 export const Container = styled.div`
   display: flex;
@@ -6,6 +16,9 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   margin: 30px;
+
+  animation-name: ${form};
+  animation-duration: 2s;
 `;
 
 export const Info = styled.div`

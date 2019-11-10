@@ -187,7 +187,7 @@ export default class Main extends Component {
                     events.map(
                       event =>
                         isEqual(
-                          parseISO(event.date_event),
+                          startOfDay(parseISO(event.date_event)),
                           startOfDay(new Date())
                         ) && (
                           <li key={event.id}>
@@ -228,7 +228,7 @@ export default class Main extends Component {
                     events.map(
                       event =>
                         isAfter(
-                          parseISO(event.date_event),
+                          startOfDay(parseISO(event.date_event)),
                           startOfDay(new Date())
                         ) && (
                           <li key={event.id}>
