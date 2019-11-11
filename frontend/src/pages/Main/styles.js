@@ -3,13 +3,21 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   justify-content: center;
-
   @media (max-width: 900px) {
     flex-direction: column;
+    font-size: 14px;
   }
 `;
 export const ContainerEvents = styled.div`
   width: 100%;
+
+  @media (max-width: 700px) {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 12px;
+  }
 `;
 
 export const Info = styled.div`
@@ -47,6 +55,12 @@ export const ListEvent = styled.ul`
       flex: 1;
       text-align: center;
     }
+
+    @media (max-width: 900px) {
+      padding: 2px;
+      font-size: 8px;
+      margin: 3px 0;
+    }
   }
 `;
 
@@ -77,12 +91,24 @@ export const ContainerForm = styled.div`
   width: 100%;
   margin: 40px 50px;
   padding: 0 50px;
+
+  @media (max-width: 700px) {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+  }
 `;
 
 export const Action = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  strong {
+    margin-right: 5px;
+    background: #666;
+    padding: 3px;
+  }
 
   svg {
     margin: 0 5px;

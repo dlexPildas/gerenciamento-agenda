@@ -6,7 +6,8 @@ import {
   FaRegCalendarAlt,
   FaUserPlus,
   FaTimesCircle,
-  FaEdit
+  FaEdit,
+  FaEye
 } from "react-icons/fa";
 
 import api from "../../services/api";
@@ -206,12 +207,12 @@ export default class Main extends Component {
 
                             {event.user_owner && (
                               <Action>
-                                <FaUserPlus
-                                  onClick={() => alert()}
-                                  title="Adicionar um novo participante"
-                                />
+                                <strong>Meu evento!</strong>
                               </Action>
                             )}
+                            <FaEye
+                              title={`nome do evento: ${event.name} \nlocal: ${event.place}\nDono: ${event.owner}\nDescrição: ${event.description}\nCategoria: ${event.category} `}
+                            />
                           </li>
                         )
                     )}
@@ -244,6 +245,9 @@ export default class Main extends Component {
                               )}`}</DateEvent>
                             </Dates>
                             <span>{event.place}</span>
+                            <FaEye
+                              title={`nome do evento: ${event.name} \nlocal: ${event.place}\nDono: ${event.owner}\nDescrição: ${event.description}\nCategoria: ${event.category} `}
+                            />
                             {event.user_owner && (
                               <Action>
                                 <FaUserPlus

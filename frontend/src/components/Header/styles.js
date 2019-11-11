@@ -7,14 +7,26 @@ export const Container = styled.div`
   justify-content: space-between;
   padding: 0 30px;
 
+  @media (max-width: 900px) {
+    padding: 0 5px;
+  }
+
   nav {
     display: flex;
+
+    @media (max-width: 900px) {
+      justify-content: flex-start;
+    }
   }
 
   button {
-    margin-right: 100px;
+    /* margin-right: 100px; */
     background: transparent;
     border: 0;
+
+    @media (max-width: 700px) {
+      margin-right: 10px;
+    }
   }
 
   svg {
@@ -54,5 +66,6 @@ export const Span = styled.span.attrs({})`
 
   @media (max-width: 900px) {
     font-size: 58%;
+    margin-left: 10px;
   }
 `;

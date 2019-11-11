@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import { parseISO, startOfMinute, startOfDay } from "date-fns";
+
 import {
   Container,
   Info,
@@ -12,7 +14,7 @@ import {
 import FormEvents from "../FormEvents";
 import api from "../../services/api";
 
-import { FaArrowLeft, FaUserCircle, FaTimesCircle } from "react-icons/fa";
+import { FaUserCircle, FaTimesCircle } from "react-icons/fa";
 
 export default class UpdateEvents extends Component {
   state = {
@@ -20,7 +22,8 @@ export default class UpdateEvents extends Component {
     event: {},
     name: "",
     description: "",
-    date_event: "",
+    date_event: new Date(),
+    date_event_final: new Date(),
     category: "",
     place: ""
   };
@@ -33,26 +36,65 @@ export default class UpdateEvents extends Component {
       event: response.data,
       name: response.data.name,
       description: response.data.description,
-      date_event: response.data.date_event,
+
       category: response.data.category,
       place: response.data.place
     });
+
+    await this.newDate();
   }
+
+  newDate = () => {
+    this.setState({
+      date_event: `${startOfDay(
+        parseISO(this.state.event.date_event)
+      ).getFullYear()}-${`${startOfDay(
+        parseISO(this.state.event.date_event)
+      ).getMonth() + 1}`.padStart(2, 0)}-${`${startOfDay(
+        parseISO(this.state.event.date_event)
+      ).getDate()}`.padStart(2, 0)}T${`${startOfMinute(
+        parseISO(this.state.event.date_event)
+      ).getHours()}`.padStart(2, 0)}:${`${startOfMinute(
+        parseISO(this.state.event.date_event)
+      ).getMinutes()}`.padStart(2, 0)}`,
+
+      date_event_final: `${startOfDay(
+        parseISO(this.state.event.date_event_final)
+      ).getFullYear()}-${`${startOfDay(
+        parseISO(this.state.event.date_event_final)
+      ).getMonth() + 1}`.padStart(2, 0)}-${`${startOfDay(
+        parseISO(this.state.event.date_event_final)
+      ).getDate()}`.padStart(2, 0)}T${`${startOfMinute(
+        parseISO(this.state.event.date_event_final)
+      ).getHours()}`.padStart(2, 0)}:${`${startOfMinute(
+        parseISO(this.state.event.date_event_final)
+      ).getMinutes()}`.padStart(2, 0)}`
+    });
+  };
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    console.log(this.state.date_event, this.state.date_event_final);
   };
 
   /**
    * function to create a event
    */
   handleSubmit = async () => {
-    const { name, description, date_event, place, category } = this.state;
+    const {
+      name,
+      description,
+      date_event,
+      date_event_final,
+      place,
+      category
+    } = this.state;
 
     if (
       name === "" ||
       description === "" ||
       date_event === "" ||
+      date_event_final === "" ||
       place === "" ||
       category === ""
     ) {
@@ -65,6 +107,7 @@ export default class UpdateEvents extends Component {
         name,
         description,
         date_event,
+        date_event_final,
         place,
         category
       });
@@ -85,6 +128,7 @@ export default class UpdateEvents extends Component {
       name,
       description,
       date_event,
+      date_event_final,
       category,
       place
     } = this.state;
@@ -98,6 +142,7 @@ export default class UpdateEvents extends Component {
             name={name}
             description={description}
             date_event={date_event}
+            date_event_final={date_event_final}
             category={category}
             place={place}
             change={this.handleChange}

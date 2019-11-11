@@ -110,7 +110,7 @@ export default class Login extends Component {
       return alert(response.data.error);
     }
 
-    alert("User was register with success");
+    alert("User was did register with success");
     return this.handleIsRegister();
   };
 

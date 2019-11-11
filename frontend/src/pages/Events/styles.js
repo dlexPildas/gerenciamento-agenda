@@ -17,6 +17,14 @@ export const Filter = styled.div`
     color: #666;
     font-weight: bold;
     padding-left: 10px;
+
+    @media (max-width: 700px) {
+      margin-top: 10px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    flex-direction: column;
   }
 `;
 
@@ -45,6 +53,14 @@ export const ListEvent = styled.ul`
       flex: 1;
       display: flex;
       align-items: center;
+
+      @media (max-width: 700px) {
+        font-size: 8px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      font-size: 8px;
     }
   }
 `;
@@ -56,7 +72,7 @@ export const Dates = styled.div`
 `;
 
 export const DateEvent = styled.span`
-  width: 60%;
+  width: 80%;
   display: flex;
   justify-content: center;
   background: #666;

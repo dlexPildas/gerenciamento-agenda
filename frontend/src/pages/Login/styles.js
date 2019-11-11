@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const form = keyframes`
   from {
@@ -15,6 +15,10 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;
 
 export const LoginComponent = styled.div`
@@ -27,6 +31,11 @@ export const LoginComponent = styled.div`
 
   animation-name: ${form};
   animation-duration: 1s;
+
+  @media (max-width: 700px) {
+    width: 80%;
+    height: 100px;
+  }
 `;
 
 export const RegisterUser = styled.div.attrs({})`
@@ -57,6 +66,11 @@ export const Logo = styled.img`
   width: 250px;
   height: 200px;
   margin-bottom: 20px;
+
+  @media (max-width: 700px) {
+    width: 80%;
+    height: 150px;
+  }
 `;
 
 export const Error = styled.span`
@@ -108,9 +122,17 @@ export const Actions = styled.div`
   width: 100%;
   display: flex;
 
+  @media (max-width: 700px) {
+    margin-top: 10px;
+  }
+
   span {
     flex: 1;
     text-align: end;
+
+    @media (max-width: 700px) {
+      font-size: 10px;
+    }
 
     a {
       color: #3176ba;
@@ -119,6 +141,10 @@ export const Actions = styled.div`
 
       &:hover {
         opacity: 0.6;
+      }
+
+      @media (max-width: 700px) {
+        font-size: 12px;
       }
     }
   }

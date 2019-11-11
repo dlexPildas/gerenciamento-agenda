@@ -9,6 +9,10 @@ const ContainerEvents = styled.div`
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   padding: 30px;
   margin: 40px 50px;
+
+  @media (max-width: 700px) {
+    margin: 15px 0;
+  }
 `;
 
 export default ContainerEvents;

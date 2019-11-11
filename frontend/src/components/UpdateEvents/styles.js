@@ -4,6 +4,12 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 10px 100px;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    width: 100%;
+    padding: 10px 0;
+  }
 `;
 
 export const Info = styled.div`
@@ -43,6 +49,11 @@ export const ListUsers = styled.ul`
       flex: 1;
     }
   }
+  @media (max-width: 700px) {
+    width: 100%;
+    padding: 2px;
+    font-size: 10px;
+  }
 `;
 
 export const SideLeft = styled.div`
@@ -51,6 +62,9 @@ export const SideLeft = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 0 30px;
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;
 
 export const SideRigth = styled.div`
@@ -59,6 +73,10 @@ export const SideRigth = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 0px 10px;
+
+  @media (max-width: 700px) {
+    margin-top: 50px;
+  }
 `;
 
 export const Action = styled.div`

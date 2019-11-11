@@ -131,7 +131,9 @@ export default class Events extends Component {
                       <span>{event.place}</span>
                       <Action>
                         <div>
-                          <FaEye />
+                          <FaEye
+                            title={`nome do evento: ${event.name} \nlocal: ${event.place}\nDono: ${event.owner}\nDescrição: ${event.description}\nCategoria: ${event.category} `}
+                          />
                         </div>
 
                         <ButtonParticipate

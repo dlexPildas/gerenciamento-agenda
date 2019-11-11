@@ -5,8 +5,8 @@ export const Container = styled.div`
   /* margin-left: 100px; */
   display: flex;
   flex-direction: column;
-  @media (max-width: 900px) {
-    margin-right: 50px;
+  @media (max-width: 700px) {
+    margin-right: 0px;
   }
   input,
   select {
@@ -97,5 +97,10 @@ export const Dates = styled.div`
       color: #666;
       font-size: 12px;
     }
+  }
+  @media (max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 `;

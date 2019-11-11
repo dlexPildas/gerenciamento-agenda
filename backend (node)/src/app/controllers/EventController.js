@@ -162,10 +162,6 @@ class EventController {
       return res.json({ error: "User does not exist" });
     }
 
-    // /**
-    //  * convert date_event and verify if date_event is past
-    //  */
-
     const dateStart = startOfMinute(parseISO(date_event));
     const dateFinal = startOfMinute(parseISO(date_event_final));
 
@@ -233,6 +229,7 @@ class EventController {
       name: Yup.string(),
       description: Yup.string(),
       date_event: Yup.date(),
+      date_event_final: Yup.date(),
       place: Yup.string(),
       category: Yup.string()
     });
@@ -253,6 +250,55 @@ class EventController {
       return res
         .status(401)
         .json({ error: "You don't have permission to update this event" });
+    }
+
+    /**
+     * convert date_event and verify if date_event is past
+     */
+    const dateStart = startOfMinute(parseISO(req.body.date_event));
+    const dateFinal = startOfMinute(parseISO(req.body.date_event_final));
+
+    if (isAfter(dateStart, dateFinal)) {
+      return res.json({ error: "Initial date is after than final date" });
+    }
+    if (isBefore(dateStart, new Date())) {
+      return res.json({ error: "Date is past" });
+    }
+
+    /**
+     * find to event and verify if exist
+     */
+    const eventExist = await Event.findAll({
+      where: {
+        owner: req.userId,
+        id: { [Op.ne]: event_id },
+        category: "exclusivo",
+        date_event: {
+          [Op.between]: [
+            startOfDay(parseISO(req.body.date_event)),
+            endOfDay(parseISO(req.body.date_event))
+          ]
+        }
+      }
+    });
+
+    if (eventExist && req.body.category === "exclusivo") {
+      let error = false;
+      eventExist.map(async event => {
+        if (isBefore(dateStart, event.date_event)) {
+          if (!isBefore(dateFinal, event.date_event)) {
+            error = true;
+          }
+        } else if (!isAfter(dateStart, event.date_event_final)) {
+          error = true;
+        }
+      });
+
+      if (error) {
+        return res.json({
+          error: "Already exist a event to this date and hour"
+        });
+      }
     }
 
     await event.update(req.body);
